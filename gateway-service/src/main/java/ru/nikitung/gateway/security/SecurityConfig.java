@@ -52,7 +52,8 @@ public class SecurityConfig {
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of(
-                "https://nikitung.vercel.app",
+                "http://37.139.62.68",
+                "http://37.139.62.68:*",
                 "http://localhost",
                 "http://localhost:*"
         ));

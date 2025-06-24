@@ -51,8 +51,11 @@ public class SecurityConfig {
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("https://your-frontend.vercel.app:*")); // Wildcard pattern
-        config.setAllowedOriginPatterns(List.of("http://localhost:*")); // Wildcard pattern
+        config.setAllowedOriginPatterns(List.of(
+                "https://nikitung.vercel.app",
+                "http://localhost",
+                "http://localhost:*"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

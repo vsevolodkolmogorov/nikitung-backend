@@ -1,0 +1,224 @@
+services:
+  user-db:
+    image: postgres:15
+    container_name: user-db
+    restart: always
+    environment:
+      POSTGRES_DB: nikitung_users
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - user_db_data:/var/lib/postgresql/data
+    networks:
+      - spring-net
+
+  rating-db:
+    image: postgres:15
+    container_name: rating-db
+    restart: always
+    environment:
+      POSTGRES_DB: nikitung_rating
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5434:5432"
+    volumes:
+      - rating_db_data:/var/lib/postgresql/data
+    networks:
+      - spring-net
+
+  place-db:
+    image: postgres:15
+    container_name: place-db
+    restart: always
+    environment:
+      POSTGRES_DB: nikitung_place
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5435:5432"
+    volumes:
+      - place_db_data:/var/lib/postgresql/data
+    networks:
+      - spring-net
+
+  comment-db:
+    image: postgres:15
+    container_name: comment-db
+    restart: always
+    environment:
+      POSTGRES_DB: nikitung_comment
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5436:5432"
+    volumes:
+      - comment_db_data:/var/lib/postgresql/data
+    networks:
+      - spring-net
+
+  config-service:
+    build: ./config-service
+    container_name: config-service
+    image: config-service
+    ports:
+      - "8888:8888"
+    networks:
+      - spring-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  eureka-service:
+    build: ./eureka-service
+    container_name: eureka-service
+    image: eureka-service
+    restart: on-failure
+    depends_on:
+      - config-service
+    ports:
+      - "8761:8761"
+    environment:
+      SPRING_PROFILES_ACTIVE: native
+    networks:
+      - spring-net
+    env_file:
+      - .env
+
+  gateway-service:
+    build: ./gateway-service
+    container_name: gateway-service
+    image: gateway-service
+    restart: on-failure
+    depends_on:
+      - config-service
+      - eureka-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - spring-net
+    env_file:
+      - .env
+
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    image: user-service
+    restart: on-failure
+    ports:
+      - "8081:8081"
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/nikitung_users
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - config-service
+      - user-db
+      - gateway-service
+      - eureka-service
+    networks:
+      - spring-net
+    env_file:
+      - .env
+
+  rating-service:
+    build: ./rating-service
+    container_name: rating-service
+    image: rating-service
+    restart: on-failure
+    ports:
+      - "8082:8082"
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://rating-db:5432/nikitung_rating
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - config-service
+      - rating-db
+      - gateway-service
+      - eureka-service
+    networks:
+      - spring-net
+    env_file:
+      - .env
+
+  comment-service:
+    build: ./comment-service
+    container_name: comment-service
+    image: comment-service
+    restart: on-failure
+    ports:
+      - "8083:8083"
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://comment-db:5432/nikitung_comment
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - config-service
+      - comment-db
+      - eureka-service
+      - gateway-service
+    networks:
+      - spring-net
+    env_file:
+      - .env
+
+  place-service:
+    build: ./place-service
+    container_name: place-service
+    image: place-service
+    restart: on-failure
+    ports:
+      - "8084:8084"
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://place-db:5432/nikitung_place
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - config-service
+      - place-db
+      - eureka-service
+      - gateway-service
+    networks:
+      - spring-net
+    env_file:
+      - .env
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    image: auth-service
+    restart: on-failure
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - config-service
+      - eureka-service
+      - gateway-service
+    networks:
+      - spring-net
+    env_file:
+      - .env
+
+volumes:
+  user_db_data:
+  comment_db_data:
+  place_db_data:
+  rating_db_data:
+
+networks:
+  spring-net:
+    driver: bridge

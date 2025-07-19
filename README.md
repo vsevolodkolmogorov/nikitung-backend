@@ -1,4 +1,6 @@
-# 🐬 NIKITUNG — MVP for Rating Swimming Spots
+### 🏷️ Type: Personal Project
+
+# NIKITUNG — MVP for Rating Swimming Spots
 
 ## 📌 Overview
 
@@ -12,20 +14,20 @@ This is the **first working version** of the project. It’s designed using **mi
 
 The project is split into 8 microservices:
 
-- `CONFIG` — centralized configuration service (Spring Cloud Config)
-- `GATEWAY` — API gateway for routing and CORS handling
-- `EUREKA` — service discovery (Netflix Eureka)
-- `AUTH` — authentication and authorization (JWT-based)
-- `USER` — user management service
-- `PLACE` — handles creation and storage of swimming spots
-- `RATING` — manages rating logic for each place
-- `COMMENT` — user comments and reviews per place
+| Service            | Description |
+|---------------------|-------------|
+| **config-service**  | Centralized configuration service (Spring Cloud Config) |
+| **gateway-service** | API Gateway for routing and CORS handling |
+| **eureka-server**   | Service discovery (Netflix Eureka) |
+| **auth-service**    | Authentication and authorization (JWT-based) |
+| **user-service**    | Manages users |
+| **place-service**   | Handles creation and storage of swimming spots |
+| **rating-service**  | Manages rating logic for each place |
+| **comment-service** | Manages user comments and reviews for each place |
 
 ---
 
-## 🚀 Running the Project
-
-### 🛠️ Tech Stack
+## 🛠️ Tech Stack
 
 - Java 17 + Spring Boot
 - Spring Cloud (Gateway, Config, Eureka)
@@ -34,6 +36,32 @@ The project is split into 8 microservices:
 -  Feign + WebClient
 -  JWT (security)
 -  Docker & Docker Compose
+
+---
+
+## 🚀 Features
+
+### auth-service
+- User authorization and login functionality
+
+### place-service
+- Display list of swimming spots with sorting and search
+- Create new swimming spots
+- View detailed information of a spot by ID, including average ratings and user comments
+
+### rating-service
+- Submit and manage ratings for swimming spots using a 5-point scale
+- Additional parameters and descriptions for detailed rating
+
+### comment-service
+- Add and manage user comments and reviews for swimming spots
+
+### user-service
+- Display general user information
+
+---
+
+## ▶️ How to Run
 
 ### 1. 📄 Environment Variables
 

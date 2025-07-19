@@ -8,8 +8,6 @@
 
 This is the **first working version** of the project. It’s designed using **microservice architecture** and will continue to evolve over time.
 
----
-
 ## 🧩 Architecture
 
 The project is split into 8 microservices:
@@ -25,8 +23,6 @@ The project is split into 8 microservices:
 | **rating-service**  | Manages rating logic for each place |
 | **comment-service** | Manages user comments and reviews for each place |
 
----
-
 ## 🛠️ Tech Stack
 
 - Java 17 + Spring Boot
@@ -36,8 +32,6 @@ The project is split into 8 microservices:
 -  Feign + WebClient
 -  JWT (security)
 -  Docker & Docker Compose
-
----
 
 ## 🚀 Features
 
@@ -59,8 +53,6 @@ The project is split into 8 microservices:
 ### user-service
 - Display general user information
 
----
-
 ## ▶️ How to Run
 
 ### 1. 📄 Environment Variables
@@ -72,16 +64,12 @@ You must configure the following environment files:
 
 These contain required variables for service communication and database access.
 
----
-
 ### 2. 🖥️ Local Development
 
 To run locally, it is recommended to use the **`.envFile` plugin** (e.g. in IntelliJ IDEA or VS Code).  
 This allows automatic injection of variables from `.env.local`.
 
 You can start each service from your IDE using its main class.
-
----
 
 ### 3. 🐳 Docker Compose
 
